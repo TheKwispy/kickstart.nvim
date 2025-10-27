@@ -678,6 +678,7 @@ require('lazy').setup({
         cssls = {},
         -- But for many setups, the LSP (`ts_ls`) will work just fine
         ts_ls = {},
+        postgres_lsp = {},
         emmet_language_server = {
           cmd = { 'emmet-language-server', '--stdio' },
           filetypes = {
@@ -699,6 +700,7 @@ require('lazy').setup({
           },
           root_markers = { '.git' },
         },
+        java_language_server = {},
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
@@ -997,11 +999,30 @@ require('lazy').setup({
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
   --
   -- require 'kickstart.plugins.debug',
-  -- require 'kickstart.plugins.indent_line',
+  require 'kickstart.plugins.indent_line',
   -- require 'kickstart.plugins.lint',
   require 'kickstart.plugins.autopairs',
   require 'kickstart.plugins.neo-tree',
-  -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
+  require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
+  {
+    'ray-x/lsp_signature.nvim',
+    event = 'InsertEnter',
+    opts = {
+      bind = true,
+      handler_opts = {
+        border = 'rounded',
+      },
+    },
+    -- or use config
+    -- config = function(_, opts) require'lsp_signature'.setup({you options}) end
+  },
+  vim.keymap.set({ 'n' }, '<C-k>', function()
+    require('lsp_signature').toggle_float_win()
+  end, { silent = true, noremap = true, desc = 'toggle signature' }),
+
+  vim.keymap.set({ 'n' }, '<Leader>k', function()
+    vim.lsp.buf.signature_help()
+  end, { silent = true, noremap = true, desc = 'toggle signature' }),
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
