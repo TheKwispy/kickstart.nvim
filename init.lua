@@ -1059,5 +1059,8 @@ vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.signcolumn = 'number'
 
+vim.keymap.set('n', '<C-s>', ':w<CR>', { desc = 'Save file' })
+vim.keymap.set('i', '<C-s>', '<Esc>:w<CR>a', { desc = 'Save file' })
+
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
