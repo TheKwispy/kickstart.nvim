@@ -306,7 +306,7 @@ require('lazy').setup({
     },
     opts = {},
   },
-  { -- Toggleable floating terminal, open by pressing ALT-ENTER in normal mode (Mapping at the bottom of the file)
+  { -- Toggleable floating terminal, open by pressing CTRL-ENTER in normal mode (Mapping at the bottom of the file)
     'nvzone/floaterm',
     dependencies = 'nvzone/volt',
     opts = {},
@@ -1115,6 +1115,6 @@ vim.opt.foldmethod = 'indent'
 vim.opt.foldlevelstart = 99
 
 -- NOTE: Togglable Floating terminal
-vim.keymap.set('n', '<S-CR>', ':FloatermToggle<CR>')
+vim.keymap.set('n', '<C-CR>', ':FloatermToggle<CR>')
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
