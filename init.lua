@@ -91,7 +91,21 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
+-- If using alacritty add this to alacritty.toml in ~/config/alacritty/
+-- Fonts you can get from the link in the readme of this project
+--[[
+[general]
+import = [
+    "~/.config/alacritty/themes/themes/synthwave_84.toml"
+]
+[font.normal]
+family = "FiraCode Nerd Font Mono"
+style = "Regular"
+[font.bold]
+family = "FiraCode Nerd Font Mono"
+style = "Bold"
+--]]
+vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
 -- See `:help vim.o`
@@ -283,6 +297,43 @@ require('lazy').setup({
       },
     },
   },
+  { -- Adds git integration to neovim
+    'NeogitOrg/neogit',
+    dependencies = {
+      'nvim-lua/plenary.nvim', -- required
+      'sindrets/diffview.nvim', -- optional - Diff integration
+      'nvim-telescope/telescope.nvim', -- optional
+    },
+    opts = {},
+  },
+  { -- Toggleable floating terminal, open by pressing CTRL-ENTER in normal mode (Mapping at the bottom of the file)
+    'nvzone/floaterm',
+    dependencies = 'nvzone/volt',
+    opts = {},
+    cmd = 'FloatermToggle',
+  },
+  {
+    'folke/noice.nvim',
+    event = 'VeryLazy',
+    opts = {
+      -- add any options here
+      presets = {
+        bottom_search = false, -- Use classic bottom commandline for search otherwise it's a popup
+        lsp_doc_border = true, -- add a border to hover docs and signature help
+        command_palette = true, -- position the cmdline and popupmenu together
+        long_message_to_split = true, -- long messages will be sent to a split
+        inc_rename = false, -- enables an input dialog for inc-rename.nvim
+      },
+    },
+    dependencies = {
+      -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+      'MunifTanjim/nui.nvim',
+      -- OPTIONAL:
+      --   `nvim-notify` is only needed, if you want to use the notification view.
+      --   If not available, we use `mini` as the fallback
+      'rcarriga/nvim-notify',
+    },
+  },
 
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
   --
@@ -297,7 +348,6 @@ require('lazy').setup({
   --
   -- Then, because we use the `opts` key (recommended), the configuration runs
   -- after the plugin has been loaded as `require(MODULE).setup(opts)`.
-
   { -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
     event = 'VimEnter', -- Sets the loading event to 'VimEnter'
@@ -700,8 +750,8 @@ require('lazy').setup({
           },
           root_markers = { '.git' },
         },
-        java_language_server = {},
-        -- rust_analyzer = {},
+        -- java_language_server = {},
+        rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
         -- Some languages (like typescript) have entire language plugins that can be useful:
@@ -824,12 +874,12 @@ require('lazy').setup({
           -- `friendly-snippets` contains a variety of premade snippets.
           --    See the README about individual language/framework/plugin snippets:
           --    https://github.com/rafamadriz/friendly-snippets
-          -- {
-          --   'rafamadriz/friendly-snippets',
-          --   config = function()
-          --     require('luasnip.loaders.from_vscode').lazy_load()
-          --   end,
-          -- },
+          {
+            'rafamadriz/friendly-snippets',
+            config = function()
+              require('luasnip.loaders.from_vscode').lazy_load()
+            end,
+          },
         },
         opts = {},
       },
@@ -897,7 +947,7 @@ require('lazy').setup({
       fuzzy = { implementation = 'lua' },
 
       -- Shows a signature help window while you type arguments for a function
-      signature = { enabled = true },
+      signature = { enabled = false },
     },
   },
 
@@ -1003,26 +1053,7 @@ require('lazy').setup({
   -- require 'kickstart.plugins.lint',
   require 'kickstart.plugins.autopairs',
   require 'kickstart.plugins.neo-tree',
-  require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
-  {
-    'ray-x/lsp_signature.nvim',
-    event = 'InsertEnter',
-    opts = {
-      bind = true,
-      handler_opts = {
-        border = 'rounded',
-      },
-    },
-    -- or use config
-    -- config = function(_, opts) require'lsp_signature'.setup({you options}) end
-  },
-  vim.keymap.set({ 'n' }, '<C-k>', function()
-    require('lsp_signature').toggle_float_win()
-  end, { silent = true, noremap = true, desc = 'toggle signature' }),
-
-  vim.keymap.set({ 'n' }, '<Leader>k', function()
-    vim.lsp.buf.signature_help()
-  end, { silent = true, noremap = true, desc = 'toggle signature' }),
+  require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymap
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
@@ -1055,12 +1086,23 @@ require('lazy').setup({
     },
   },
 })
+
+-- NOTE: Custom settings
+
+-- NOTE: Numbers
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.signcolumn = 'number'
 
+-- NOTE: Custom Keyboards shortcuts
 vim.keymap.set('n', '<C-s>', ':w<CR>', { desc = 'Save file' })
 vim.keymap.set('i', '<C-s>', '<Esc>:w<CR>a', { desc = 'Save file' })
 
+-- NOTE: Custom folding
+vim.opt.foldmethod = 'indent'
+vim.opt.foldlevelstart = 99
+
+-- NOTE: Togglable Floating terminal
+vim.keymap.set('n', '<C-CR>', ':FloatermToggle<CR>')
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
