@@ -297,16 +297,35 @@ require('lazy').setup({
       },
     },
   },
-  -- Adds git integration to neovim
-  {
+  { -- Adds git integration to neovim
     'NeogitOrg/neogit',
-    cmd = { 'Neogit' },
     dependencies = {
       'nvim-lua/plenary.nvim', -- required
       'sindrets/diffview.nvim', -- optional - Diff integration
       'nvim-telescope/telescope.nvim', -- optional
     },
     opts = {},
+  },
+  { -- Toggleable floating terminal, open by pressing ALT-ENTER in normal mode (Mapping at the bottom of the file)
+    'nvzone/floaterm',
+    dependencies = 'nvzone/volt',
+    opts = {},
+    cmd = 'FloatermToggle',
+  },
+  {
+    'folke/noice.nvim',
+    event = 'VeryLazy',
+    opts = {
+      -- add any options here
+    },
+    dependencies = {
+      -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+      'MunifTanjim/nui.nvim',
+      -- OPTIONAL:
+      --   `nvim-notify` is only needed, if you want to use the notification view.
+      --   If not available, we use `mini` as the fallback
+      'rcarriga/nvim-notify',
+    },
   },
 
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
@@ -322,7 +341,6 @@ require('lazy').setup({
   --
   -- Then, because we use the `opts` key (recommended), the configuration runs
   -- after the plugin has been loaded as `require(MODULE).setup(opts)`.
-
   { -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
     event = 'VimEnter', -- Sets the loading event to 'VimEnter'
@@ -1096,5 +1114,7 @@ vim.keymap.set('i', '<C-s>', '<Esc>:w<CR>a', { desc = 'Save file' })
 vim.opt.foldmethod = 'indent'
 vim.opt.foldlevelstart = 99
 
+-- NOTE: Togglable Floating terminal
+vim.keymap.set('n', '<S-CR>', ':FloatermToggle<CR>')
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
