@@ -714,7 +714,7 @@ require('lazy').setup({
           },
           root_markers = { '.git' },
         },
-        java_language_server = {},
+        -- java_language_server = {},
         rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
@@ -1037,6 +1037,19 @@ require('lazy').setup({
   vim.keymap.set({ 'n' }, '<Leader>k', function()
     vim.lsp.buf.signature_help()
   end, { silent = true, noremap = true, desc = 'toggle signature' }),
+
+  -- {
+  --   'NeogitOrg/neogit',
+  --   dependencies = {
+  --     'nvim-lua/plenary.nvim', -- required
+  --     'sindrets/diffview.nvim', -- optional - Diff integration
+  --     'nvim-telescope/telescope.nvim', -- optional
+  --   },
+  --   cmd = 'Neogit',
+  --   config = function()
+  --     require('neogit').setup {}
+  --   end,
+  -- },
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
