@@ -1054,6 +1054,28 @@ require('lazy').setup({
   require 'kickstart.plugins.autopairs',
   require 'kickstart.plugins.neo-tree',
   require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymap
+  {
+    'luukvbaal/statuscol.nvim',
+    config = function()
+      -- local builtin = require("statuscol.builtin")
+      require('statuscol').setup {
+        -- configuration goes here, for example:
+        relculright = true,
+        segments = {
+          { text = { builtin.foldfunc }, click = 'v:lua.ScFa' },
+          {
+            sign = { namespace = { 'diagnostic/signs' }, maxwidth = 2, auto = true },
+            click = 'v:lua.ScSa',
+          },
+          { text = { builtin.lnumfunc }, click = 'v:lua.ScLa' },
+          {
+            sign = { name = { '.*' }, maxwidth = 2, colwidth = 1, auto = true, wrap = true },
+            click = 'v:lua.ScSa',
+          },
+        },
+      }
+    end,
+  },
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.

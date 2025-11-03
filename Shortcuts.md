@@ -8,6 +8,8 @@ In visual mode using `< > =` to indent left right and autoindent
 
 Friendly-snippets are enabled, to check what they are go to [the repo for it](https://github.com/rafamadriz/friendly-snippets/wiki)
 
+`<C-CR>`: Toggle a floating terminal
+
 ### Folding
 
 `zi` Toggle folding
