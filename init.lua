@@ -317,6 +317,13 @@ require('lazy').setup({
     event = 'VeryLazy',
     opts = {
       -- add any options here
+      presets = {
+        bottom_search = false, -- Use classic bottom commandline for search otherwise it's a popup
+        lsp_doc_border = true, -- add a border to hover docs and signature help
+        command_palette = true, -- position the cmdline and popupmenu together
+        long_message_to_split = true, -- long messages will be sent to a split
+        inc_rename = false, -- enables an input dialog for inc-rename.nvim
+      },
     },
     dependencies = {
       -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
@@ -940,7 +947,7 @@ require('lazy').setup({
       fuzzy = { implementation = 'lua' },
 
       -- Shows a signature help window while you type arguments for a function
-      signature = { enabled = true },
+      signature = { enabled = false },
     },
   },
 
@@ -1046,26 +1053,7 @@ require('lazy').setup({
   -- require 'kickstart.plugins.lint',
   require 'kickstart.plugins.autopairs',
   require 'kickstart.plugins.neo-tree',
-  require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
-  {
-    'ray-x/lsp_signature.nvim',
-    event = 'InsertEnter',
-    opts = {
-      bind = true,
-      handler_opts = {
-        border = 'rounded',
-      },
-    },
-    -- or use config
-    -- config = function(_, opts) require'lsp_signature'.setup({you options}) end
-  },
-  vim.keymap.set({ 'n' }, '<C-k>', function()
-    require('lsp_signature').toggle_float_win()
-  end, { silent = true, noremap = true, desc = 'toggle signature' }),
-
-  vim.keymap.set({ 'n' }, '<Leader>k', function()
-    vim.lsp.buf.signature_help()
-  end, { silent = true, noremap = true, desc = 'toggle signature' }),
+  require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymap
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
