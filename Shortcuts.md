@@ -6,6 +6,28 @@
 
 In visual mode using `< > =` to indent left right and autoindent
 
+Friendly-snippets are enabled, to check what they are go to [the repo for it](https://github.com/rafamadriz/friendly-snippets/wiki)
+
+### Folding
+
+`zi` Toggle folding
+
+`za` Toggle folds under cursor 
+
+`zA` Toggle all folds under cursor
+
+`zc` Close folds under cursor
+
+`zC` Close all folds under cursor
+
+`zo` Open folds under cursor
+
+`zO` Open all folds under cursor
+
+`zd` Delete folds under cursor
+
+`zD` Delete all folds under cursor
+
 ### Telescope
 
 `<leader>sf`: Search files in workspace
