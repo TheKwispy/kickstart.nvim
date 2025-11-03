@@ -297,6 +297,17 @@ require('lazy').setup({
       },
     },
   },
+  -- Adds git integration to neovim
+  {
+    'NeogitOrg/neogit',
+    cmd = { 'Neogit' },
+    dependencies = {
+      'nvim-lua/plenary.nvim', -- required
+      'sindrets/diffview.nvim', -- optional - Diff integration
+      'nvim-telescope/telescope.nvim', -- optional
+    },
+    opts = {},
+  },
 
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
   --
@@ -1037,19 +1048,6 @@ require('lazy').setup({
   vim.keymap.set({ 'n' }, '<Leader>k', function()
     vim.lsp.buf.signature_help()
   end, { silent = true, noremap = true, desc = 'toggle signature' }),
-
-  -- {
-  --   'NeogitOrg/neogit',
-  --   dependencies = {
-  --     'nvim-lua/plenary.nvim', -- required
-  --     'sindrets/diffview.nvim', -- optional - Diff integration
-  --     'nvim-telescope/telescope.nvim', -- optional
-  --   },
-  --   cmd = 'Neogit',
-  --   config = function()
-  --     require('neogit').setup {}
-  --   end,
-  -- },
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
