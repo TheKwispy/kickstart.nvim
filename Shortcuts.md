@@ -2,8 +2,6 @@
 
 ### General
 
-`<C-s>`: Works like :w, if you were in insert mode it puts you back
-
 In visual mode using `< > =` to indent left right and autoindent
 
 Friendly-snippets are enabled, to check what they are go to [the repo for it](https://github.com/rafamadriz/friendly-snippets/wiki)
@@ -30,6 +28,10 @@ Friendly-snippets are enabled, to check what they are go to [the repo for it](ht
 
 `zD` Delete all folds under cursor
 
+### Neotree
+
+`<S-f>`: Toggle Neotree and reveal (show) current file
+
 ### Telescope
 
 `<leader>sf`: Search files in workspace
@@ -42,6 +44,55 @@ Friendly-snippets are enabled, to check what they are go to [the repo for it](ht
 
 `<leader>s.`: Search recent files
 
+#### In the search window
+
+`<C-n>` or `<Down>` : actions.move_selection_next,
+
+`<C-p>` or `<Up>` : actions.move_selection_previous,
+
+`<C-c>` : actions.close,
+
+`<CR>` : actions.select_default,
+
+`<C-x>` : actions.select_horizontal,
+
+`<C-v>` : actions.select_vertical,
+
+`<C-t>` : actions.select_tab,
+
+### Tabs
+
+`:tabs` : List all tabs, > indicates current tab and + indicates a tab with unsaved modifications 
+
+`<C-PageUp/Down`: To navigate in the tab stack forward and back
+
+`<C-TAB>`: Switch between the 2 latest tabs
+
+`<C-w>T`: Move buffer to new tab
+
+`:tabnew`: create new tab
+
+`:tabn[ext] [0-9]`: Move to next tab, if number is provided, move to that tab
+
+`:tabc[close]`: close tab
+
+`:tabo[nly]`: Close other tabs
+
+### Window
+
+`<C-w>s`: split window horizontal
+
+`<C-w>v`: split window vertical
+
+`<C-w>q`: quit window
+
+`<C-w>c`: Close window
+
+`<C-w>[hjkl,HJKL]`: move window in the direction, if capital it moves all the way
+
+`<C-w>w`: Switch window, loops through all open windows
+
+`<C-w>x`: Swap current with next
 
 ### Kickstart LSP
 

@@ -463,6 +463,9 @@ require('lazy').setup({
         --   },
         -- },
         -- pickers = {}
+        defaults = {
+          initial_mode = 'normal',
+        },
         extensions = {
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
@@ -726,8 +729,6 @@ require('lazy').setup({
         pyright = {},
         html = {},
         cssls = {},
-        -- But for many setups, the LSP (`ts_ls`) will work just fine
-        ts_ls = {},
         postgres_lsp = {},
         emmet_language_server = {
           cmd = { 'emmet-language-server', '--stdio' },
@@ -750,6 +751,8 @@ require('lazy').setup({
           },
           root_markers = { '.git' },
         },
+        -- But for many setups, the LSP (`ts_ls`) will work just fine
+        ts_ls = {},
         -- java_language_server = {},
         rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
@@ -1019,7 +1022,21 @@ require('lazy').setup({
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
+      ensure_installed = {
+        'bash',
+        'c',
+        'diff',
+        'html',
+        'lua',
+        'luadoc',
+        'markdown',
+        'markdown_inline',
+        'query',
+        'vim',
+        'vimdoc',
+        'javascript',
+        'typescript',
+      },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {
@@ -1054,29 +1071,29 @@ require('lazy').setup({
   require 'kickstart.plugins.autopairs',
   require 'kickstart.plugins.neo-tree',
   require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymap
-  {
-    'luukvbaal/statuscol.nvim',
-    config = function()
-      -- local builtin = require("statuscol.builtin")
-      require('statuscol').setup {
-        -- configuration goes here, for example:
-        relculright = true,
-        segments = {
-          { text = { builtin.foldfunc }, click = 'v:lua.ScFa' },
-          {
-            sign = { namespace = { 'diagnostic/signs' }, maxwidth = 2, auto = true },
-            click = 'v:lua.ScSa',
-          },
-          { text = { builtin.lnumfunc }, click = 'v:lua.ScLa' },
-          {
-            sign = { name = { '.*' }, maxwidth = 2, colwidth = 1, auto = true, wrap = true },
-            click = 'v:lua.ScSa',
-          },
-        },
-      }
-    end,
-  },
-
+  -- { -- Statuscol plugin, not needed for now
+  --   'luukvbaal/statuscol.nvim',
+  --   config = function()
+  --     -- local builtin = require("statuscol.builtin")
+  --     require('statuscol').setup {
+  --       -- configuration goes here, for example:
+  --       relculright = true,
+  --       segments = {
+  --         { text = { builtin.foldfunc }, click = 'v:lua.ScFa' },
+  --         {
+  --           sign = { namespace = { 'diagnostic/signs' }, maxwidth = 2, auto = true },
+  --           click = 'v:lua.ScSa',
+  --         },
+  --         { text = { builtin.lnumfunc }, click = 'v:lua.ScLa' },
+  --         {
+  --           sign = { name = { '.*' }, maxwidth = 2, colwidth = 1, auto = true, wrap = true },
+  --           click = 'v:lua.ScSa',
+  --         },
+  --       },
+  --     }
+  --   end,
+  -- },
+  { 'akinsho/toggleterm.nvim', version = '*', config = true },
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
   --
@@ -1112,19 +1129,26 @@ require('lazy').setup({
 -- NOTE: Custom settings
 
 -- NOTE: Numbers
-vim.opt.number = true
-vim.opt.relativenumber = true
-vim.opt.signcolumn = 'number'
+-- vim.opt.number = true
+-- vim.opt.relativenumber = true
+-- vim.opt.signcolumn = 'number'
 
--- NOTE: Custom Keyboards shortcuts
-vim.keymap.set('n', '<C-s>', ':w<CR>', { desc = 'Save file' })
-vim.keymap.set('i', '<C-s>', '<Esc>:w<CR>a', { desc = 'Save file' })
+vim.opt.numberwidth = 3
+vim.opt.statuscolumn = "%=%{v:virtnum < 1 ? (v:relnum ? v:relnum : v:lnum < 10 ? v:lnum . '  ' : v:lnum) : ''}%=%s"
+
+-- NOTE: Autosave
+vim.opt.autowriteall = true
 
 -- NOTE: Custom folding
 vim.opt.foldmethod = 'indent'
 vim.opt.foldlevelstart = 99
 
--- NOTE: Togglable Floating terminal
-vim.keymap.set('n', '<C-CR>', ':FloatermToggle<CR>')
+-- NOTE: Togglable terminal
+vim.keymap.set('n', '<C-CR>', ':FloatermToggle<CR>') -- Floating terminal
+vim.keymap.set('n', '<S-CR>', ':ToggleTerm<CR>') -- Bottom of the screen terminal
+
+-- NOTE: Neotree shortcut
+vim.keymap.set('n', '<S-f>', ':Neotree toggle=true reveal <CR>', { desc = 'Toggle Neotree and reveal current file' })
+
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
