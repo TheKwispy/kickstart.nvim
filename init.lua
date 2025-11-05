@@ -458,14 +458,12 @@ require('lazy').setup({
         --  All the info you're looking for is in `:help telescope.setup()`
         --
         -- defaults = {
+        --   initial_mode = 'normal',
         --   mappings = {
         --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
         --   },
         -- },
         -- pickers = {}
-        defaults = {
-          initial_mode = 'normal',
-        },
         extensions = {
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
@@ -813,7 +811,11 @@ require('lazy').setup({
       }
     end,
   },
-
+  {
+    'pmizio/typescript-tools.nvim',
+    dependencies = { 'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig' },
+    opts = {},
+  },
   { -- Autoformat
     'stevearc/conform.nvim',
     event = { 'BufWritePre' },
@@ -1145,10 +1147,13 @@ vim.opt.foldlevelstart = 99
 
 -- NOTE: Togglable terminal
 vim.keymap.set('n', '<C-CR>', ':FloatermToggle<CR>') -- Floating terminal
-vim.keymap.set('n', '<S-CR>', ':ToggleTerm<CR>') -- Bottom of the screen terminal
+vim.keymap.set({ 'n', 'i' }, '<F12>', '<ESC><ESC>:FloatermToggle<CR>') -- Floating terminal
+vim.keymap.set('n', '<M-CR>', ':ToggleTerm<CR>') -- Bottom of the screen terminal
+vim.keymap.set({ 'n', 'i' }, '<F11>', '<ESC><ESC>:TermExec cmd="fuck"<CR>') -- Bottom of the screen terminal
+vim.keymap.set({ 'n', 'i' }, '<C-F11>', '<ESC><ESC>:TermExec cmd="unfuck"<CR>') -- Bottom of the screen terminal
 
 -- NOTE: Neotree shortcut
-vim.keymap.set('n', '<S-f>', ':Neotree toggle=true reveal <CR>', { desc = 'Toggle Neotree and reveal current file' })
+vim.keymap.set('n', '<M-f>', ':Neotree toggle=true reveal <CR>', { desc = 'Toggle Neotree and reveal current file' })
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et

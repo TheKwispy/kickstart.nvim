@@ -30,7 +30,7 @@ Friendly-snippets are enabled, to check what they are go to [the repo for it](ht
 
 ### Neotree
 
-`<S-f>`: Toggle Neotree and reveal (show) current file
+`<M-f>`: Toggle Neotree and reveal (show) current file
 
 ### Telescope
 
@@ -64,7 +64,7 @@ Friendly-snippets are enabled, to check what they are go to [the repo for it](ht
 
 `:tabs` : List all tabs, > indicates current tab and + indicates a tab with unsaved modifications 
 
-`<C-PageUp/Down`: To navigate in the tab stack forward and back
+`<C-PageUp/Down` or `gt/gT`: To navigate in the tab stack forward and back
 
 `<C-TAB>`: Switch between the 2 latest tabs
 
