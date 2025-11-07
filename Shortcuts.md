@@ -8,6 +8,8 @@ Friendly-snippets are enabled, to check what they are go to [the repo for it](ht
 
 `<C-CR>`: Toggle a floating terminal
 
+`<M-CR>`: Toggle bottom terminal
+
 ### Folding
 
 `zi` Toggle folding
@@ -43,6 +45,10 @@ Friendly-snippets are enabled, to check what they are go to [the repo for it](ht
 `<leader>sw`: Search current word
 
 `<leader>s.`: Search recent files
+
+`<leader>s/`: Telescope search current file
+
+`<leader>/`: Fuzzy search current file
 
 #### In the search window
 
@@ -123,7 +129,11 @@ Friendly-snippets are enabled, to check what they are go to [the repo for it](ht
 `saiw)`: add (sa) for inner word (iw) parentheses ())
 
 `saiw?[[<CR>]]<CR>`: add (`sa`) for inner word (`iw`) interactive surrounding (`?`): `[[` for left and `]]` for right.
+
 `2sdf`: delete (`sd`) second (`2`) surrounding function call (`f`).
+
 `sr)tdiv<CR>`: replace (`sr`) surrounding parenthesis (`)`) with tag (`t`) with identifier 'div' (`div<CR>` in command line prompt).
+
 `sff`: find right (`sf`) part of surrounding function call (`f`).
+
 `sh}`: highlight (`sh`) for a brief period of time surrounding curly brackets (`}`).

@@ -312,6 +312,85 @@ require('lazy').setup({
     opts = {},
     cmd = 'FloatermToggle',
   },
+  -- Add Folkes snacks here: https://github.com/folke/snacks.nvim/tree/main
+  {
+    'folke/snacks.nvim',
+    opts = {
+      scratch = {
+        -- your scratch configuration comes here
+        -- or leave it empty to use the default settings
+        -- refer to the configuration section below
+      },
+      gh = {
+        -- your gh configuration comes here
+        -- or leave it empty to use the default settings
+        -- refer to the configuration section below
+      },
+      picker = {
+        sources = {
+          gh_issue = {
+            -- your gh_issue picker configuration comes here
+            -- or leave it empty to use the default settings
+          },
+          gh_pr = {
+            -- your gh_pr picker configuration comes here
+            -- or leave it empty to use the default settings
+          },
+        },
+      },
+    },
+    keys = {
+      {
+        '<leader>.',
+        function()
+          Snacks.scratch()
+        end,
+        desc = 'Toggle Scratch Buffer',
+      },
+      {
+        '<leader>S',
+        function()
+          Snacks.scratch.select()
+        end,
+        desc = 'Select Scratch Buffer',
+      },
+      {
+        '<leader>hB',
+        function()
+          Snacks.git.blame_line()
+        end,
+        desc = 'Git [B]lame Line Full',
+      },
+      {
+        '<leader>gi',
+        function()
+          Snacks.picker.gh_issue()
+        end,
+        desc = 'GitHub Issues (open)',
+      },
+      {
+        '<leader>gI',
+        function()
+          Snacks.picker.gh_issue { state = 'all' }
+        end,
+        desc = 'GitHub Issues (all)',
+      },
+      {
+        '<leader>gp',
+        function()
+          Snacks.picker.gh_pr()
+        end,
+        desc = 'GitHub Pull Requests (open)',
+      },
+      {
+        '<leader>gP',
+        function()
+          Snacks.picker.gh_pr { state = 'all' }
+        end,
+        desc = 'GitHub Pull Requests (all)',
+      },
+    },
+  },
   {
     'folke/noice.nvim',
     event = 'VeryLazy',
@@ -1147,13 +1226,15 @@ vim.opt.foldlevelstart = 99
 
 -- NOTE: Togglable terminal
 vim.keymap.set('n', '<C-CR>', ':FloatermToggle<CR>') -- Floating terminal
-vim.keymap.set({ 'n', 'i' }, '<F12>', '<ESC><ESC>:FloatermToggle<CR>') -- Floating terminal
-vim.keymap.set('n', '<M-CR>', ':ToggleTerm<CR>') -- Bottom of the screen terminal
-vim.keymap.set({ 'n', 'i' }, '<F11>', '<ESC><ESC>:TermExec cmd="fuck"<CR>') -- Bottom of the screen terminal
-vim.keymap.set({ 'n', 'i' }, '<C-F11>', '<ESC><ESC>:TermExec cmd="unfuck"<CR>') -- Bottom of the screen terminal
+vim.keymap.set({ 'n', 'i', 't' }, '<F12>', '<ESC><ESC>:FloatermToggle<CR>') -- Floating terminal
+vim.keymap.set({ 'n', 'i', 't' }, '<M-CR>', '<ESC><ESC>:ToggleTerm<CR>') -- Bottom of the screen terminal
 
 -- NOTE: Neotree shortcut
 vim.keymap.set('n', '<M-f>', ':Neotree toggle=true reveal <CR>', { desc = 'Toggle Neotree and reveal current file' })
 
+-- NOTE: Clear quickfix list
+vim.api.nvim_create_user_command('ClearQuickFixList', function()
+  vim.fn.setqflist {}
+end, {})
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
