@@ -1,0 +1,28 @@
+{
+	"no-console":{
+		"prefix": "nccl",
+		"body":[
+			"// eslint-disable-next-line no-console",
+			"console.log('$0');"
+		]
+	},
+	"Got here debug":{
+		"prefix": "gothere",
+		"body":[
+			"// eslint-disable-next-line no-console",
+			"console.log('GOT HERE');"
+		]
+	},
+	"pretty log": {
+		"prefix": "prettylog",
+		"body":[
+			"/* eslint-disable no-console */",
+			"console.log(==================);",
+			"console.log('${TM_DIRECTORY}/${TM_FILENAME}');",
+			"console.log('Line:${TM_LINE_NUMBER}');",
+			"console.log('$0');",
+			"console.log(==================);",
+			"/* eslint-enable no-console */"
+		]
+	}
+}

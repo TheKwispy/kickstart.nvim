@@ -316,11 +316,90 @@ require('lazy').setup({
   {
     'folke/snacks.nvim',
     opts = {
-      scratch = {
-        -- your scratch configuration comes here
+      dashboard = {
+        -- your dashboard configuration comes here
         -- or leave it empty to use the default settings
         -- refer to the configuration section below
+        sections = {
+          { section = 'header' },
+          {
+            pane = 2,
+            section = 'terminal',
+            cmd = 'colorscript -e square',
+            height = 5,
+            padding = 1,
+          },
+          { section = 'keys', gap = 1, padding = 1 },
+          {
+            pane = 2,
+            icon = ' ',
+            desc = 'Browse Repo',
+            padding = 1,
+            key = 'b',
+            action = function()
+              Snacks.gitbrowse()
+            end,
+          },
+          function()
+            local in_git = Snacks.git.get_root() ~= nil
+            local cmds = {
+              {
+                title = 'Notifications',
+                cmd = 'gh notify -s -a -n5',
+                action = function()
+                  vim.ui.open 'https://github.com/notifications'
+                end,
+                key = 'n',
+                icon = ' ',
+                height = 5,
+                enabled = true,
+              },
+              {
+                title = 'Open Issues',
+                cmd = 'gh issue list -L 3',
+                key = 'i',
+                action = function()
+                  vim.fn.jobstart('gh issue list --web', { detach = true })
+                end,
+                icon = ' ',
+                height = 7,
+              },
+              {
+                icon = ' ',
+                title = 'Open PRs',
+                cmd = 'gh pr list -L 3',
+                key = 'P',
+                action = function()
+                  vim.fn.jobstart('gh pr list --web', { detach = true })
+                end,
+                height = 7,
+              },
+              {
+                icon = ' ',
+                title = 'Git Status',
+                cmd = 'git --no-pager diff --stat -B -M -C',
+                height = 10,
+              },
+            }
+            return vim.tbl_map(function(cmd)
+              return vim.tbl_extend('force', {
+                pane = 2,
+                section = 'terminal',
+                enabled = in_git,
+                padding = 1,
+                ttl = 5 * 60,
+                indent = 3,
+              }, cmd)
+            end, cmds)
+          end,
+          { section = 'startup' },
+        },
       },
+      -- scratch = {
+      --   -- your scratch configuration comes here
+      --   -- or leave it empty to use the default settings
+      --   -- refer to the configuration section below
+      -- },
       gh = {
         -- your gh configuration comes here
         -- or leave it empty to use the default settings
@@ -413,7 +492,43 @@ require('lazy').setup({
       'rcarriga/nvim-notify',
     },
   },
-
+  {
+    'folke/trouble.nvim',
+    opts = {}, -- for default options, refer to the configuration section for custom setup.
+    cmd = 'Trouble',
+    keys = {
+      {
+        '<leader>xx',
+        '<cmd>Trouble diagnostics toggle<cr>',
+        desc = 'Diagnostics (Trouble)',
+      },
+      {
+        '<leader>xX',
+        '<cmd>Trouble diagnostics toggle filter.buf=0<cr>',
+        desc = 'Buffer Diagnostics (Trouble)',
+      },
+      {
+        '<leader>cs',
+        '<cmd>Trouble symbols toggle focus=false<cr>',
+        desc = 'Symbols (Trouble)',
+      },
+      {
+        '<leader>cl',
+        '<cmd>Trouble lsp toggle focus=false win.position=right<cr>',
+        desc = 'LSP Definitions / references / ... (Trouble)',
+      },
+      {
+        '<leader>xL',
+        '<cmd>Trouble loclist toggle<cr>',
+        desc = 'Location List (Trouble)',
+      },
+      {
+        '<leader>xQ',
+        '<cmd>Trouble qflist toggle<cr>',
+        desc = 'Quickfix List (Trouble)',
+      },
+    },
+  },
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
   --
   -- This is often very useful to both group configuration, as well as handle
@@ -506,6 +621,12 @@ require('lazy').setup({
         end,
       },
       { 'nvim-telescope/telescope-ui-select.nvim' },
+      {
+        'nvim-telescope/telescope-live-grep-args.nvim',
+        -- This will not install any breaking changes.
+        -- For major updates, this must be adjusted manually.
+        version = '^1.0.0',
+      },
 
       -- Useful for getting pretty icons, but requires a Nerd Font.
       { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
@@ -553,7 +674,7 @@ require('lazy').setup({
       -- Enable Telescope extensions if they are installed
       pcall(require('telescope').load_extension, 'fzf')
       pcall(require('telescope').load_extension, 'ui-select')
-
+      pcall(require('telescope').load_extension 'live_grep_args')
       -- See `:help telescope.builtin`
       local builtin = require 'telescope.builtin'
       vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
@@ -830,6 +951,7 @@ require('lazy').setup({
         },
         -- But for many setups, the LSP (`ts_ls`) will work just fine
         ts_ls = {},
+        eslint = {},
         -- java_language_server = {},
         rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
@@ -915,7 +1037,7 @@ require('lazy').setup({
         -- Disable "format_on_save lsp_fallback" for languages that don't
         -- have a well standardized coding style. You can add additional
         -- languages here or re-enable it for the disabled ones.
-        local disable_filetypes = { c = true, cpp = true }
+        local disable_filetypes = { c = true, cpp = true, javascript = true, jsreact = true, typescript = true, tsreact = true, jsx = true }
         if disable_filetypes[vim.bo[bufnr].filetype] then
           return nil
         else
@@ -1065,9 +1187,9 @@ require('lazy').setup({
     config = function()
       -- Better Around/Inside textobjects
       --
-      -- Examples:
-      --  - va)  - [V]isually select [A]round [)]paren
-      --  - yinq - [Y]ank [I]nside [N]ext [Q]uote
+      -- examples:
+      --  - va)  - [v]isually select [a]round [)]paren
+      --  - yinq - [y]ank [i]nside [n]ext [q]uote
       --  - ci'  - [C]hange [I]nside [']quote
       require('mini.ai').setup { n_lines = 500 }
 
@@ -1207,34 +1329,9 @@ require('lazy').setup({
   },
 })
 
--- NOTE: Custom settings
+-- NOTE: Load customizations
 
--- NOTE: Numbers
--- vim.opt.number = true
--- vim.opt.relativenumber = true
--- vim.opt.signcolumn = 'number'
+require 'custom.plugins'
 
-vim.opt.numberwidth = 3
-vim.opt.statuscolumn = "%=%{v:virtnum < 1 ? (v:relnum ? v:relnum : v:lnum < 10 ? v:lnum . '  ' : v:lnum) : ''}%=%s"
-
--- NOTE: Autosave
-vim.opt.autowriteall = true
-
--- NOTE: Custom folding
-vim.opt.foldmethod = 'indent'
-vim.opt.foldlevelstart = 99
-
--- NOTE: Togglable terminal
-vim.keymap.set('n', '<C-CR>', ':FloatermToggle<CR>') -- Floating terminal
-vim.keymap.set({ 'n', 'i', 't' }, '<F12>', '<ESC><ESC>:FloatermToggle<CR>') -- Floating terminal
-vim.keymap.set({ 'n', 'i', 't' }, '<M-CR>', '<ESC><ESC>:ToggleTerm<CR>') -- Bottom of the screen terminal
-
--- NOTE: Neotree shortcut
-vim.keymap.set('n', '<M-f>', ':Neotree toggle=true reveal <CR>', { desc = 'Toggle Neotree and reveal current file' })
-
--- NOTE: Clear quickfix list
-vim.api.nvim_create_user_command('ClearQuickFixList', function()
-  vim.fn.setqflist {}
-end, {})
--- The line beneath this is called `modeline`. See `:help modeline`
+-- The line beneath this is called `modeline`. See `:help modeline§`
 -- vim: ts=2 sts=2 sw=2 et

@@ -40,6 +40,8 @@ Friendly-snippets are enabled, to check what they are go to [the repo for it](ht
 
 `<leader>sg`: Grep search in files in workspace
 
+`<leader>sG`: Grep search with args in files in workspace
+
 `<leader>sk`: Search keymaps, find shortcuts and what can be done
 
 `<leader>sw`: Search current word
@@ -65,6 +67,26 @@ Friendly-snippets are enabled, to check what they are go to [the repo for it](ht
 `<C-v>` : actions.select_vertical,
 
 `<C-t>` : actions.select_tab,
+
+#### Live Grep Arg examples
+
+`"searchstring" file`: Search for the string (grep style) in file
+
+`"searchstring" file -v`: Invert match
+
+`-i`: ignore case
+
+`-w`: Only show matches surrounded by word boundries, same `\bWORD\b`
+
+`--hidden OR -.`: Search hidden files
+
+`"searchstring" --iglob **/test/**`: Search for string in any file thats path includes test
+
+`"search" --iglob !**/test/**`: Same as above but ignore any results with "test" in path
+
+`"search" -tjs`: Search for string in any file of type js, same as `--type js`
+
+`"search" -Tjs`: Search for string in any file that is not of type js, same as `--type-not js`
 
 ### Tabs
 
