@@ -2,4 +2,9 @@
 --  I promise not to create any merge conflicts in this directory :)
 --
 -- See the kickstart.nvim README for more information
-return {}
+
+-- return {}
+
+require('luasnip.loaders.from_vscode').lazy_load()
+require 'custom.plugins.vimopts'
+require 'custom.plugins.customcommands'
