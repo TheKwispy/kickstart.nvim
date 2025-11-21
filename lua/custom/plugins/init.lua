@@ -7,3 +7,4 @@
 
 require('luasnip.loaders.from_vscode').lazy_load()
 require 'custom.plugins.vimopts'
+require 'custom.plugins.customcommands'

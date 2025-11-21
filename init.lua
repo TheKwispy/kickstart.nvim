@@ -199,10 +199,10 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
 -- TIP: Disable arrow keys in normal mode
--- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
--- vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
--- vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
--- vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
+vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
+vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
+vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
+vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
 
 -- Keybinds to make split navigation easier.
 --  Use CTRL+<hjkl> to switch between windows
@@ -214,10 +214,15 @@ vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower win
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
 -- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
--- vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
--- vim.keymap.set("n", "<C-S-l>", "<C-w>L", { desc = "Move window to the right" })
--- vim.keymap.set("n", "<C-S-j>", "<C-w>J", { desc = "Move window to the lower" })
--- vim.keymap.set("n", "<C-S-k>", "<C-w>K", { desc = "Move window to the upper" })
+vim.keymap.set('n', '<C-S-h>', '<C-w>H', { desc = 'Move window to the left' })
+vim.keymap.set('n', '<C-S-l>', '<C-w>L', { desc = 'Move window to the right' })
+vim.keymap.set('n', '<C-S-j>', '<C-w>J', { desc = 'Move window to the lower' })
+vim.keymap.set('n', '<C-S-k>', '<C-w>K', { desc = 'Move window to the upper' })
+
+vim.keymap.set('n', '<C-M-h>', '<C-w><', { desc = 'Resize window to the left' })
+vim.keymap.set('n', '<C-M-l>', '<C-w>>', { desc = 'Resize window to the right' })
+vim.keymap.set('n', '<C-M-j>', '<C-w>-', { desc = 'Resize window to the lower' })
+vim.keymap.set('n', '<C-M-k>', '<C-w>+', { desc = 'Resize window to the upper' })
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
@@ -316,109 +321,26 @@ require('lazy').setup({
   {
     'folke/snacks.nvim',
     opts = {
-      dashboard = {
-        -- your dashboard configuration comes here
-        -- or leave it empty to use the default settings
-        -- refer to the configuration section below
-        sections = {
-          { section = 'header' },
-          {
-            pane = 2,
-            section = 'terminal',
-            cmd = 'colorscript -e square',
-            height = 5,
-            padding = 1,
-          },
-          { section = 'keys', gap = 1, padding = 1 },
-          {
-            pane = 2,
-            icon = ' ',
-            desc = 'Browse Repo',
-            padding = 1,
-            key = 'b',
-            action = function()
-              Snacks.gitbrowse()
-            end,
-          },
-          function()
-            local in_git = Snacks.git.get_root() ~= nil
-            local cmds = {
-              {
-                title = 'Notifications',
-                cmd = 'gh notify -s -a -n5',
-                action = function()
-                  vim.ui.open 'https://github.com/notifications'
-                end,
-                key = 'n',
-                icon = ' ',
-                height = 5,
-                enabled = true,
-              },
-              {
-                title = 'Open Issues',
-                cmd = 'gh issue list -L 3',
-                key = 'i',
-                action = function()
-                  vim.fn.jobstart('gh issue list --web', { detach = true })
-                end,
-                icon = ' ',
-                height = 7,
-              },
-              {
-                icon = ' ',
-                title = 'Open PRs',
-                cmd = 'gh pr list -L 3',
-                key = 'P',
-                action = function()
-                  vim.fn.jobstart('gh pr list --web', { detach = true })
-                end,
-                height = 7,
-              },
-              {
-                icon = ' ',
-                title = 'Git Status',
-                cmd = 'git --no-pager diff --stat -B -M -C',
-                height = 10,
-              },
-            }
-            return vim.tbl_map(function(cmd)
-              return vim.tbl_extend('force', {
-                pane = 2,
-                section = 'terminal',
-                enabled = in_git,
-                padding = 1,
-                ttl = 5 * 60,
-                indent = 3,
-              }, cmd)
-            end, cmds)
-          end,
-          { section = 'startup' },
-        },
-      },
-      -- scratch = {
-      --   -- your scratch configuration comes here
-      --   -- or leave it empty to use the default settings
-      --   -- refer to the configuration section below
-      -- },
-      gh = {
-        -- your gh configuration comes here
-        -- or leave it empty to use the default settings
-        -- refer to the configuration section below
-      },
+      scratch = {},
+      explorer = {},
+      gh = {},
       picker = {
         sources = {
-          gh_issue = {
-            -- your gh_issue picker configuration comes here
-            -- or leave it empty to use the default settings
-          },
-          gh_pr = {
-            -- your gh_pr picker configuration comes here
-            -- or leave it empty to use the default settings
-          },
+          files = {},
+          explorer = {},
+          gh_issue = {},
+          gh_pr = {},
         },
       },
     },
     keys = {
+      {
+        '<M-f>',
+        function()
+          Snacks.explorer.reveal()
+        end,
+        desc = 'Open file explorer',
+      },
       {
         '<leader>.',
         function()
@@ -664,6 +586,16 @@ require('lazy').setup({
         --   },
         -- },
         -- pickers = {}
+        defaults = {
+          theme = 'center',
+          sorting_strategy = 'ascending',
+          layout_config = {
+            horizontal = {
+              prompt_position = 'top',
+              preview_width = 0.5,
+            },
+          },
+        },
         extensions = {
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
@@ -1037,7 +969,8 @@ require('lazy').setup({
         -- Disable "format_on_save lsp_fallback" for languages that don't
         -- have a well standardized coding style. You can add additional
         -- languages here or re-enable it for the disabled ones.
-        local disable_filetypes = { c = true, cpp = true, javascript = true, jsreact = true, typescript = true, tsreact = true, jsx = true }
+        local disable_filetypes =
+          { c = true, cpp = true, javascript = true, jsreact = true, typescript = true, tsreact = true, jsx = true, javascriptreact = true }
         if disable_filetypes[vim.bo[bufnr].filetype] then
           return nil
         else
@@ -1274,28 +1207,6 @@ require('lazy').setup({
   require 'kickstart.plugins.autopairs',
   require 'kickstart.plugins.neo-tree',
   require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymap
-  -- { -- Statuscol plugin, not needed for now
-  --   'luukvbaal/statuscol.nvim',
-  --   config = function()
-  --     -- local builtin = require("statuscol.builtin")
-  --     require('statuscol').setup {
-  --       -- configuration goes here, for example:
-  --       relculright = true,
-  --       segments = {
-  --         { text = { builtin.foldfunc }, click = 'v:lua.ScFa' },
-  --         {
-  --           sign = { namespace = { 'diagnostic/signs' }, maxwidth = 2, auto = true },
-  --           click = 'v:lua.ScSa',
-  --         },
-  --         { text = { builtin.lnumfunc }, click = 'v:lua.ScLa' },
-  --         {
-  --           sign = { name = { '.*' }, maxwidth = 2, colwidth = 1, auto = true, wrap = true },
-  --           click = 'v:lua.ScSa',
-  --         },
-  --       },
-  --     }
-  --   end,
-  -- },
   { 'akinsho/toggleterm.nvim', version = '*', config = true },
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
